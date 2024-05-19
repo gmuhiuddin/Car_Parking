@@ -1,0 +1,26 @@
+.select-location-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.select-location-container>div {
+    background-color: aqua;
+    padding: 9px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.select-location-container>div>input {
+    cursor: pointer;
+}
+
+.select-location-container>div>a>button {
+    cursor: pointer;
+    padding: 9px;
+    font-size: 1.2em;
+    outline: none;
+    border-radius: 9px;
+    border:none;
+    margin: 7px;
+}
