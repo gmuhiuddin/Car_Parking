@@ -22,6 +22,8 @@ function SelecedParkingInfo() {
     const maxDateForReserveObj = new Date();
 
     maxDateForReserveObj.setDate(maxDateForReserveObj.getDate()+5);
+
+    const maxDateForReserve = `${maxDateForReserveObj.getFullYear()}-${maxDateForReserveObj.getMonth() + 1 < 10 ? 0 + String(maxDateForReserveObj.getMonth() + 1) : maxDateForReserveObj.getMonth() + 1}-${maxDateForReserveObj.getDate() < 10 ? 0 + String(maxDateForReserveObj.getDate()) : maxDateForReserveObj.getDate()}`
     
     useEffect(() => {
         checkBookedTime();
@@ -87,7 +89,6 @@ function SelecedParkingInfo() {
                     alert(err.message);
                     document.location.reload();
                     btnRef.current.disabled = false;
-
                 }
 
             } else {
@@ -107,8 +108,7 @@ function SelecedParkingInfo() {
         <div className='select-park-info-container'>
             <div className="select-date-time-container">
                 <div className="select-data-container">
-                    <Datepicker onChange={handleReservationDate} disabled={reservationLocation ? false : true} maxDate={maxDateForReserveObj} minDate={todayDateObj} />
-                    {/* <input  onChange={handleReservationDate} required type="date" min={todayDate} max={maxDateForReserve} /> */}
+                    <input disabled={reservationLocation ? false : true} onChange={handleReservationDate} required type="date" min={todayDate} max={maxDateForReserve} />
                 </div >
                 <div className="select-time-contianer">
                     {times.map((element, timeIndex) => {

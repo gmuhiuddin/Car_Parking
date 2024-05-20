@@ -64,6 +64,10 @@
     margin: auto;
 }
 
+.select-data-container input:disabled {
+    cursor: not-allowed;
+}
+
 .select-date-time-container>button {
     background-color: #01d293;
     font-size: 1.2em;
