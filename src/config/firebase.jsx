@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: "AIzaSyCYZ7jrySsTMZtSDI3cMNK1Vqk8kcvXswk",
@@ -10,7 +10,7 @@ const firebaseConfig = {
     messagingSenderId: "892918611033",
     appId: "1:892918611033:web:d3cc172ccd701f4f194548",
     measurementId: "G-67FW8XVQJQ"
-  };
+};
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -43,18 +43,18 @@ const getUserData = async (uid) => {
 const getBookedTime = async (reservationDate, reservationLocation) => {
 
     const appointmentCollection = collection(db, "appointment");
-    
+
     const q = reservationLocation ? query(
-        appointmentCollection, 
+        appointmentCollection,
         where("date", "==", reservationDate),
         where("location", "==", reservationLocation)
     ) : query(
-        appointmentCollection, 
+        appointmentCollection,
         where("date", "==", reservationDate)
     );
 
     const appointments = await getDocs(q);
-    
+
     const selectedTimes = [];
 
     appointments.docs.forEach(element => {
@@ -66,15 +66,17 @@ const getBookedTime = async (reservationDate, reservationLocation) => {
 
 const makeAppointment = async (uid, email, date, time, location, parkingSlotNum) => {
 
+    const appointmentDate = new Date(date);
+
     const appointmentIdCollection = doc(db, "appointmentId", "7STXCXe6yHLvM5zR73Ld");
 
     const appointmentIdData = await getDoc(appointmentIdCollection);
     const ticketNum = appointmentIdData.data().id + 1;
-    
+
     const appointmentCollection = doc(db, "appointment", String(ticketNum));
 
     await setDoc(appointmentCollection, {
-        time, uid, date, location
+        time, uid, date: appointmentDate.getTime(), location
     });
 
     await fetch("https://carparkingnode-production.up.railway.app/sendmail/confirmemail", {
@@ -86,7 +88,7 @@ const makeAppointment = async (uid, email, date, time, location, parkingSlotNum)
             email, ticketNum, location, parkingSlotNum, date, time
         })
     });
-    
+
     await updateDoc(appointmentIdCollection, {
         id: ticketNum
     });
@@ -94,7 +96,7 @@ const makeAppointment = async (uid, email, date, time, location, parkingSlotNum)
     return ticketNum;
 };
 
-const cancelAppointment = async (email, ticketNum) => {   
+const cancelAppointment = async (email, ticketNum) => {
     const appointmentCollection = doc(db, "appointment", String(ticketNum));
 
     await deleteDoc(appointmentCollection);
@@ -112,12 +114,15 @@ const cancelAppointment = async (email, ticketNum) => {
 
 const getUserAppointmentFromDb = async (uid, date) => {
 
+    const appointmentDate = new Date(date);
+
     const appointmentCollection = collection(db, "appointment");
-    
+
     const q = query(
-        appointmentCollection, 
-        where("date", "==", date),
-        where("uid", "==", uid)
+        appointmentCollection,
+        orderBy("date", "asc"),
+        where("date", ">=", appointmentDate.getTime()),
+        where("uid", "==", uid),
     );
 
     const appointments = await getDocs(q);

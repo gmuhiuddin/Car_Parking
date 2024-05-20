@@ -1,7 +1,7 @@
 .select-park-info-container {
     display: flex;
     flex-direction: column-reverse;
-    height: 100vh;
+    min-height: 100vh;
     width: 100%;
     background-color: #0e1930;
 }
@@ -64,13 +64,13 @@
 .select-date-time-container>button {
     background-color: #01d293;
     font-size: 1.2em;
-    padding: 9px;
+    padding: 9px 15px;
     border-radius: 12px;
     outline: none;
     border: none;
     cursor: pointer;
     display: block;
-    margin: auto;
+    margin: 9px auto;
 }
 
 .select-time-contianer {

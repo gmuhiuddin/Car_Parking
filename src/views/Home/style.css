@@ -14,17 +14,19 @@
     justify-content: center;
 }
 
-.appointment-container{
-    width: 59%;
+.appointment-container {
+    width: 61%;
 }
 
-h1{
+h1 {
     color: #01d293;
 }
 
 .home-main-contianer>div>div {
     height: 50%;
     width: 100%;
+    height: 39%;
+    overflow-y: auto;
     text-align: center;
 }
 
@@ -39,24 +41,24 @@ h1{
     color: #808dad;
     width: 100%;
     margin: 9px 0px;
+    border-collapse: collapse;
 }
 
 .home-main-contianer>div>div>table td {
     padding: 3px;
-    /* display: inline-block; */
     color: #808dad;
 }
 
 .home-main-contianer>div>div>table tr button {
     cursor: pointer;
-    padding: 5px;
+    padding: 3px 7px;
     font-size: .8em;
     border-radius: 9px;
     background-color: rgb(194, 31, 31);
-outline: none;
-border: none;
-box-shadow: 0px 0px 3px white;
-color: white;
+    outline: none;
+    border: none;
+    box-shadow: 0px 0px 3px white;
+    color: white;
 }
 
 .home-main-contianer>div>button {
@@ -68,4 +70,111 @@ color: white;
     border-radius: 12px;
     font-size: 1.1em;
     background-color: #01d293;
+    margin-top: 15px;
+}
+
+.img-container {
+    width: 39%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.img-container>img {
+    width: 29em;
+}
+
+@media screen and (width <=1187px) {
+    .home-main-contianer {
+        font-size: 87%;
+    }
+}
+
+@media screen and (width <=1037px) {
+    .home-main-contianer {
+        flex-direction: column-reverse;
+        justify-content: center;
+        font-size: 90%;
+    }
+
+    .home-main-contianer>div {
+        width: 100%;
+    }
+
+    .home-main-contianer>div>div {
+        height: 61%;
+    }
+}
+
+@media screen and (width <=647px) {
+    .home-main-contianer {
+        font-size: 77%;
+    }
+}
+
+@media screen and (width <357px) {
+    .home-main-contianer {
+        flex-direction: column-reverse;
+        font-size: 63%;
+    }
+
+    .home-main-contianer>div>div {
+        height: 63%;
+    }
+}
+
+@media screen and (width <309px) {
+    .home-main-contianer {
+        flex-direction: column-reverse;
+        font-size: 55%;
+    }
+
+    .home-main-contianer>div>div {
+        height: 63%;
+    }
+}
+
+@media screen and (width <255px) {
+    .home-main-contianer {
+        flex-direction: column-reverse;
+        font-size: 47%;
+    }
+
+    .home-main-contianer>div {
+        height: 50%;
+    }
+
+    .home-main-contianer>div>div {
+        height: 63%;
+    }
+}
+
+@media screen and (width <219px) {
+    .home-main-contianer {
+        flex-direction: column-reverse;
+        font-size: 39%;
+    }
+
+    .home-main-contianer>div {
+        height: 41%;
+    }
+
+    .home-main-contianer>div>div {
+        height: 53%;
+    }
+}
+
+@media screen and (width <209px) {
+    .home-main-contianer {
+        flex-direction: column-reverse;
+        font-size: 33%;
+    }
+
+    .home-main-contianer>div {
+        height: 35%;
+    }
+
+    .home-main-contianer>div>div {
+        height: 51%;
+    }
 }

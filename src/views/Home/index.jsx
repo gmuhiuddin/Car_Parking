@@ -19,16 +19,23 @@ function Home() {
         const todayDate = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" + String(date.getMonth() + 1) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + String(date.getDate()) : date.getDate()}`;
 
         const userApointment = await getUserAppointmentFromDb(res.uid, todayDate);
-        
+
         const appointmentArr = [];
 
         userApointment.docs.forEach(element => {
             appointmentArr.push({ ...element.data(), id: element.id });
         });
 
+        appointmentArr.forEach(element => {
+
+            const reserveDateObj = new Date(element.date);
+
+            element.date = `${reserveDateObj.getFullYear()}-${reserveDateObj.getMonth() + 1 < 10 ? 0 + String(reserveDateObj.getMonth() + 1) : reserveDateObj.getMonth() + 1}-${reserveDateObj.getDate() < 10 ? 0 + String(reserveDateObj.getDate()) : reserveDateObj.getDate()}`;
+        });
+
         setUserAppoinments(appointmentArr);
     };
-    
+
     const handleCancelReserv = async (id) => {
         const isConfirm = confirm("Are you sure cancel the reservation");
         if (isConfirm) {
@@ -59,7 +66,7 @@ function Home() {
                                         <td>{element.location}</td>
                                         <td>{element.date}</td>
                                         <td>P-{element.id}</td>
-                                        <button onClick={() => handleCancelReserv(element.id)}>Cancel reserv</button>
+                                        <button onClick={() => handleCancelReserv(element.id)}>Cancel reserve</button>
                                     </tr>
                                 )
                             })}
@@ -71,8 +78,8 @@ function Home() {
                 </div>
                 <button onClick={() => navigate("selectparkinfo")}>Make reservation</button>
             </div>
-            <div>
-
+            <div className='img-container'>
+                <img src='https://cdni.iconscout.com/illustration/premium/thumb/parking-spot-5032739-4197158.png' />
             </div>
         </div>
     );
