@@ -16,13 +16,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-const signup = async (name, email, password) => {
+const signup = async (username, email, password) => {
     const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password);
 
     const userDataCollection = doc(db, "users", uid);
 
     await setDoc(userDataCollection, {
-        name, email, userImg: ""
+        username, email, userImg: ""
     });
 };
 
@@ -110,4 +110,19 @@ const cancelAppointment = async (email, ticketNum) => {
     });
 };
 
-export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment };
+const getUserAppointmentFromDb = async (uid, date) => {
+
+    const appointmentCollection = collection(db, "appointment");
+    
+    const q = query(
+        appointmentCollection, 
+        where("date", "==", date),
+        where("uid", "==", uid)
+    );
+
+    const appointments = await getDocs(q);
+
+    return appointments;
+};
+
+export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb };

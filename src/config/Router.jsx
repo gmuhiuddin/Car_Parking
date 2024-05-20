@@ -6,7 +6,7 @@ import Login from "../views/Login";
 import SelecedParkingInfo from "../views/SelectParkingInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { removeUser } from "../store/userSlice";
+import { removeUser, setUser } from "../store/userSlice";
 
 const router = createBrowserRouter([
     {
@@ -36,26 +36,31 @@ const router = createBrowserRouter([
 function Layout() {
 
     const res = useSelector(res => res.userInfo.user);
-
+    
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            if(!res.uid){
+    useEffect(() => {
+        onAuthStateChanged(auth, async user => {
+            if (user) {
 
-                const userInfo = getUserData(user.uid);
-                
-                dispatch(setUser({userInfo}));
+                if(!res.uid){
+                    
+                    const userInfo = await getUserData(user.uid);
+                    
+                    dispatch(setUser({...userInfo.data(), uid: userInfo.id}));
+                };
+            } else {
+                res.uid && dispatch(removeUser());
             };
-        } else {
-            res.uid && dispatch(removeUser());
-        };
-    });
+        });
+    }, []);
 
     useEffect(() => {
         if (res.uid) {
+
+
             if (pathname == "/login" || pathname == "/forgotpasspage") {
                 navigate("/");
             };

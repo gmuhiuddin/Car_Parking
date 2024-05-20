@@ -1,0 +1,71 @@
+.home-main-contianer {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    background-color: #0e1930;
+}
+
+.home-main-contianer>div {
+    height: 100%;
+    padding: 9px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.appointment-container{
+    width: 59%;
+}
+
+h1{
+    color: #01d293;
+}
+
+.home-main-contianer>div>div {
+    height: 50%;
+    width: 100%;
+    text-align: center;
+}
+
+.home-main-contianer>div>div>h2 {
+    font-size: 1.5em;
+    color: #808dad;
+}
+
+.home-main-contianer>div>div>table {
+    padding: 3px;
+    font-size: 1.2em;
+    color: #808dad;
+    width: 100%;
+    margin: 9px 0px;
+}
+
+.home-main-contianer>div>div>table td {
+    padding: 3px;
+    /* display: inline-block; */
+    color: #808dad;
+}
+
+.home-main-contianer>div>div>table tr button {
+    cursor: pointer;
+    padding: 5px;
+    font-size: .8em;
+    border-radius: 9px;
+    background-color: rgb(194, 31, 31);
+outline: none;
+border: none;
+box-shadow: 0px 0px 3px white;
+color: white;
+}
+
+.home-main-contianer>div>button {
+    height: 3em;
+    width: 15em;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1em;
+    background-color: #01d293;
+}

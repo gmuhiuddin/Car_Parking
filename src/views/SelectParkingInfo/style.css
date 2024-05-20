@@ -1,10 +1,25 @@
+.select-park-info-container {
+    display: flex;
+    flex-direction: column-reverse;
+    height: 100vh;
+    width: 100%;
+    background-color: #0e1930;
+}
+
+.select-park-info-container>div {
+    width: 100%;
+    height: 100%;
+    background-color: #0e1930;
+}
+
 .select-location-container {
     display: flex;
     justify-content: space-around;
+    width: 100%;
+    padding: 0px 25px;
 }
 
 .select-location-container>div {
-    background-color: aqua;
     padding: 9px;
     display: flex;
     flex-direction: column;
@@ -12,7 +27,22 @@
 }
 
 .select-location-container>div>input {
-    cursor: pointer;
+    display: none;
+}
+
+.select-location-container>div>span {
+    color: white;
+    font-size: 1.1em;
+}
+
+.select-location-container>div>label {
+    padding: 15px;
+}
+
+.select-location-container>div>input:checked+label {
+    padding: 17px;
+    border: 3px solid rgb(251, 251, 251);
+    border-radius: 7px;
 }
 
 .select-location-container>div>a>button {
@@ -21,6 +51,58 @@
     font-size: 1.2em;
     outline: none;
     border-radius: 9px;
-    border:none;
+    border: none;
     margin: 7px;
+}
+
+.select-data-container {
+    /* background-color: aqua; */
+    padding: 9px;
+    text-align: center;
+}
+
+.select-date-time-container>button {
+    background-color: #01d293;
+    font-size: 1.2em;
+    padding: 9px;
+    border-radius: 12px;
+    outline: none;
+    border: none;
+    cursor: pointer;
+    display: block;
+    margin: auto;
+}
+
+.select-time-contianer {
+    height: 50%;
+}
+
+.select-time-contianer>span>input {
+    display: none;
+}
+
+.select-time-contianer>span>label {
+    padding: 15px;
+    border: 3px solid rgb(255, 255, 255);
+    margin: 5px;
+    display: inline-block;
+    border-radius: 9px;
+    color: white;
+    cursor: pointer;
+}
+
+.select-time-contianer>span>input:disabled+label {
+    padding: 13px;
+    border: 3px solid rgb(76, 76, 76);
+    margin: 5px;
+    display: inline-block;
+    border-radius: 9px;
+    color: rgb(172, 172, 172);
+    cursor: not-allowed;
+}
+
+.select-time-contianer>span>input:checked+label {
+    padding: 17px;
+    color: #01d293;
+    border-color: #01d293;
 }
