@@ -16,6 +16,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const dateObjToDateInString = (dateObj) => {
+return `${dateObj.getFullYear()}-${dateObj.getMonth() + 1 < 10 ? 0 + String(dateObj.getMonth() + 1) : dateObj.getMonth() + 1}-${dateObj.getDate() < 10 ? 0 + String(dateObj.getDate()) : dateObj.getDate()}`;
+};
+
 const signup = async (username, email, password) => {
     const { user: { uid } } = await createUserWithEmailAndPassword(auth, email, password);
 
@@ -41,41 +45,41 @@ const getUserData = async (uid) => {
 };
 
 const getBookedTime = async (reservationDate, reservationLocation) => {
-
     const appointmentCollection = collection(db, "appointment");
 
     const q = reservationLocation ? query(
         appointmentCollection,
-        where("date", "==", reservationDate),
         where("location", "==", reservationLocation)
-    ) : query(
-        appointmentCollection,
-        where("date", "==", reservationDate)
-    );
+    ) : appointmentCollection;
 
-    const appointments = await getDocs(q);
+    let appointments = await getDocs(q);
 
+    appointments = appointments.docs.filter(element => {
+        const dateObj = new Date(element.data().date);
+
+        const date = dateObjToDateInString(dateObj);
+        
+        return date == reservationDate;
+    });
+    
     const selectedTimes = [];
-
-    appointments.docs.forEach(element => {
+    
+    appointments.forEach(element => {
         selectedTimes.push(element.data().time);
     });
-
+    
     return selectedTimes;
 };
 
 const makeAppointment = async (uid, email, date, time, location, parkingSlotNum) => {
-
-    const appointmentDate = new Date(date);
-
     const appointmentIdCollection = doc(db, "appointmentId", "7STXCXe6yHLvM5zR73Ld");
 
     const appointmentIdData = await getDoc(appointmentIdCollection);
     const ticketNum = appointmentIdData.data().id + 1;
 
-    const appointmentCollection = doc(db, "appointment", String(ticketNum));
+    const appointmentDoc = doc(db, "appointment", String(ticketNum));
 
-    await setDoc(appointmentCollection, {
+    await setDoc(appointmentDoc, {
         time, uid, date: appointmentDate.getTime(), location
     });
 
@@ -130,4 +134,4 @@ const getUserAppointmentFromDb = async (uid, date) => {
     return appointments;
 };
 
-export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb };
+export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString };

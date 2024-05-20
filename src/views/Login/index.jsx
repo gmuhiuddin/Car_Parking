@@ -60,7 +60,7 @@ function LoginForm() {
             {isLogin ? (
               <form onSubmit={handleLogin} className={isLogin ? 'login' : 'signup'}>
                 <div className="field">
-                  <input type="text" placeholder="Email Address" required />
+                  <input type="email" placeholder="Email Addresss" required />
                 </div>
                 <div className="field">
                   <input type="password" placeholder="Password" required />
@@ -68,9 +68,9 @@ function LoginForm() {
                 {isLogin && <div className="pass-link"><a onClick={() => navigate('/forgotpasspage')}>Forgot password?</a></div>}
                 <div className="field btn">
                   <div className="btn-layer"></div>
-                  <input type="submit" value={isLogin ? 'Login' : 'Signup'} />
+                  <input type="submit" value='Login' />
                 </div>
-                {isLogin && <div className="signup-link">Not a member? <a onClick={handleSignupClick}>Signup now</a></div>}
+                <div className="signup-link">Not a member? <a onClick={handleSignupClick}>Signup now</a></div>
               </form>
             ) : (
               <form onSubmit={handleSignup} className="signup">

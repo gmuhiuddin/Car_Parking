@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Datepicker } from "flowbite-react";
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getBookedTime, makeAppointment } from '../../config/firebase.jsx';
+import { getBookedTime, makeAppointment, dateObjToDateInString } from '../../config/firebase.jsx';
 import Map from '../../components/Map/index.jsx';
 import './style.css';
 
@@ -17,13 +16,13 @@ function SelecedParkingInfo() {
 
     const todayDateObj = new Date();
 
-    const todayDate = `${todayDateObj.getFullYear()}-${todayDateObj.getMonth() + 1 < 10 ? 0 + String(todayDateObj.getMonth() + 1) : todayDateObj.getMonth() + 1}-${todayDateObj.getDate() < 10 ? 0 + String(todayDateObj.getDate()) : todayDateObj.getDate()}`;
+    const todayDate = dateObjToDateInString(todayDateObj);
 
     const maxDateForReserveObj = new Date();
 
-    maxDateForReserveObj.setDate(maxDateForReserveObj.getDate()+5);
+    maxDateForReserveObj.setDate(maxDateForReserveObj.getDate() + 5);
 
-    const maxDateForReserve = `${maxDateForReserveObj.getFullYear()}-${maxDateForReserveObj.getMonth() + 1 < 10 ? 0 + String(maxDateForReserveObj.getMonth() + 1) : maxDateForReserveObj.getMonth() + 1}-${maxDateForReserveObj.getDate() < 10 ? 0 + String(maxDateForReserveObj.getDate()) : maxDateForReserveObj.getDate()}`
+    const maxDateForReserve = dateObjToDateInString(maxDateForReserveObj);
     
     useEffect(() => {
         checkBookedTime();
@@ -33,15 +32,15 @@ function SelecedParkingInfo() {
 
         const dateObj = new Date(reservationDate);
 
-        const date = `${dateObj.getFullYear()}-${dateObj.getMonth() + 1 < 10 ? 0 + String(dateObj.getMonth() + 1) : dateObj.getMonth() + 1}-${dateObj.getDate() < 10 ? 0 + String(dateObj.getDate()) : dateObj.getDate()}`;
+        const date = dateObj.getTime() ? dateObjToDateInString(dateObj) : null;
 
         date != todayDate ? dateObj.setHours(0) : dateObj.setHours(todayDateObj.getHours());
 
         const arr = [{ time: "00-00 01-00" }, { time: "01-00 02-00" }, { time: "02-00 03-00" }, { time: "03-00 04-00" }, { time: "04-00 05-00" }, { time: "05-00 06-00" }, { time: "06-00 07-00" }, { time: "07-00 08-00" }, { time: "08-00 09-00" }, { time: "9-00 10-00" }, { time: "10-00 11-00" }, { time: "11-00 12-00" }, { time: "12-00 13-00" }, { time: "13-00 14-00" }, { time: "14-00 15-00" }, { time: "15-00 16-00" }, { time: "16-00 17-00" }, { time: "17-00 18-00" }, { time: "18-00 19-00" }, { time: "19-00 20-00" }, { time: "20-00 21-00" }, { time: "21-00 22-00" }, { time: "22-00 23-00" }, { time: "23-00 24-00" }];
 
         const timeArr = arr.slice(dateObj.getHours());
-
-        const selectedTimeArr = await getBookedTime(date, reservationLocation);
+        
+        const selectedTimeArr = await getBookedTime(date ? date : todayDate, reservationLocation);
 
         timeArr.forEach(element => {
             element.booked = 0;
