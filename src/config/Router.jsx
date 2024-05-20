@@ -7,6 +7,7 @@ import SelecedParkingInfo from "../views/SelectParkingInfo";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { removeUser, setUser } from "../store/userSlice";
+import Navbar from "../components/Navbar";
 
 const router = createBrowserRouter([
     {
@@ -19,37 +20,52 @@ const router = createBrowserRouter([
         children: [
             {
                 path: "/",
-                element: <Home />,
+                element: <LayoutForNavabrComp />,
+                children: [
+                    {
+                        path: "/",
+                        element: <Home />,
+                    }
+                ]
+            },
+            {
+                path: "/selectparkinfo",
+                element: <SelecedParkingInfo />,
             },
             {
                 path: "/login",
                 element: <Login />,
             },
-            {
-                path: "/selectparkinfo",
-                element: <SelecedParkingInfo />,
-            }
         ]
     }
 ]);
 
+function LayoutForNavabrComp() {
+    return (
+        <>
+            <Navbar />
+            <Outlet />
+        </>
+    )
+};
+
 function Layout() {
 
     const res = useSelector(res => res.userInfo.user);
-    
+
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
+
     useEffect(() => {
         onAuthStateChanged(auth, async user => {
             if (user) {
 
-                if(!res.uid){
-                    
+                if (!res.uid) {
+
                     const userInfo = await getUserData(user.uid);
-                    
-                    dispatch(setUser({...userInfo.data(), uid: userInfo.id}));
+
+                    dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
                 };
             } else {
                 res.uid && dispatch(removeUser());

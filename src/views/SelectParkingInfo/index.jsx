@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Datepicker } from "flowbite-react";
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { getBookedTime, makeAppointment } from '../../config/firebase.jsx';
 import Map from '../../components/Map/index.jsx';
 import './style.css';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 function SelecedParkingInfo() {
     const [times, setTimes] = useState([]);
@@ -21,8 +22,6 @@ function SelecedParkingInfo() {
     const maxDateForReserveObj = new Date();
 
     maxDateForReserveObj.setDate(maxDateForReserveObj.getDate()+5);
-
-    const maxDateForReserve = `${maxDateForReserveObj.getFullYear()}-${maxDateForReserveObj.getMonth() + 1 < 10 ? 0 + String(maxDateForReserveObj.getMonth() + 1) : maxDateForReserveObj.getMonth() + 1}-${maxDateForReserveObj.getDate() < 10 ? 0 + String(maxDateForReserveObj.getDate()) : maxDateForReserveObj.getDate()}`;
     
     useEffect(() => {
         checkBookedTime();
@@ -108,7 +107,8 @@ function SelecedParkingInfo() {
         <div className='select-park-info-container'>
             <div className="select-date-time-container">
                 <div className="select-data-container">
-                    <input disabled={reservationLocation ? false : true} onChange={handleReservationDate} required type="date" min={todayDate} max={maxDateForReserve} />
+                    <Datepicker onChange={handleReservationDate} disabled={reservationLocation ? false : true} maxDate={maxDateForReserveObj} minDate={todayDateObj} />
+                    {/* <input  onChange={handleReservationDate} required type="date" min={todayDate} max={maxDateForReserve} /> */}
                 </div >
                 <div className="select-time-contianer">
                     {times.map((element, timeIndex) => {

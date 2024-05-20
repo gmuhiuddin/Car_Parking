@@ -1,0 +1,31 @@
+.marker-image {
+    height: 29px !important;
+}
+
+.mapboxgl-canvas {
+    position: relative !important;
+    width: 31em;
+    height: 29em;
+}
+
+@media screen and (min-width: 505px) {
+    .mapboxgl-canvas {
+        position: relative !important;
+        width: 31em !important;
+        height: 29em !important;
+    }
+}
+
+@media screen and (max-width: 505px) {
+    .mapboxgl-canvas {
+        width: 23em !important;
+        height: 25em !important;
+    }
+}
+
+@media screen and (max-width: 367px) {
+    .mapboxgl-canvas {
+        width: 19em !important;
+        height: 21em !important;
+    }
+}

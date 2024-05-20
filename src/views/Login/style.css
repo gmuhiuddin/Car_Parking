@@ -11,12 +11,12 @@
   height: 100vh;
   width: 100%;
   place-items: center;
-  background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
+  background: -webkit-linear-gradient(left, #0e1930, #171f38, #212a46);
   font-size: 100%;
 }
 
 ::selection {
-  background: #1a75ff;
+  background: #171f38;
   color: #fff;
 }
 
