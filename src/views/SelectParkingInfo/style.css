@@ -80,6 +80,11 @@
     margin: 9px auto;
 }
 
+.select-date-time-container>button:disabled {
+    background-color: #26c393;
+    cursor: not-allowed;
+}
+
 .select-time-contianer {
     display: flex;
     justify-content: center;
