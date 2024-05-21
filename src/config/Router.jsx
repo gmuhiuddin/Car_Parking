@@ -62,19 +62,18 @@ function Layout() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-        onAuthStateChanged(auth, async user => {
-            if (user) {
+    onAuthStateChanged(auth, async user => {
+        if (user) {
+            if (!res.uid) {
 
-                if (!res.uid) {
+                const userInfo = await getUserData(user.uid);
 
-                    const userInfo = await getUserData(user.uid);
-
-                    dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
-                };
-            } else {
-                res.uid && dispatch(removeUser());
+                dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
             };
-        });
+        } else {
+            res.uid && dispatch(removeUser());
+        };
+    });
 
     useEffect(() => {
         if (res.uid) {

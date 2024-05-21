@@ -50,8 +50,8 @@ function LoginForm() {
 
     try {
       await login(e.target[0].value, e.target[1].value);
-      loginBtnRef.current.disabled = false;
       setSuccessMessage("User signed in successfully");
+      loginBtnRef.current.disabled = false;
 
     } catch (err) {
       setErrMessage("Email or password is incorrect");
