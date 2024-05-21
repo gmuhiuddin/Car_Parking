@@ -62,7 +62,6 @@ function Layout() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    useEffect(() => {
         onAuthStateChanged(auth, async user => {
             if (user) {
 
@@ -76,7 +75,6 @@ function Layout() {
                 res.uid && dispatch(removeUser());
             };
         });
-    }, []);
 
     useEffect(() => {
         if (res.uid) {
