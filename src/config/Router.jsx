@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { removeUser, setUser } from "../store/userSlice";
 import Navbar from "../components/Navbar";
+import PassResetPage from "../views/PassResetPage";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
             {
                 path: "/login",
                 element: <Login />,
+            },
+            {
+                path: "/forgotpasspage",
+                element: <PassResetPage />,
             },
         ]
     }

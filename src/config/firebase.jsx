@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
+import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { toPng } from 'html-to-image';
 
@@ -150,4 +150,8 @@ const generateImageFromHtml = async (element) => {
   }
 };
 
-export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString, generateImageFromHtml };
+const sendResetEmail = async (email) => {
+await sendPasswordResetEmail(auth, email);
+};
+
+export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString, generateImageFromHtml, sendResetEmail };

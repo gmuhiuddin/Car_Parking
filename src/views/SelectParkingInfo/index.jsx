@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
+import Swal from 'sweetalert2';
 import { getBookedTime, makeAppointment, dateObjToDateInString, generateImageFromHtml } from '../../config/firebase.jsx';
 import Map from '../../components/Map/index.jsx';
 import './style.css';
@@ -77,7 +78,7 @@ function SelecedParkingInfo() {
         if (reservationDate && reservationLocation && reservationTime) {
 
             const timeObj = times.filter(element => element.time == reservationTime);
-            
+
             if (timeObj[0].booked < 5) {
 
                 try {
@@ -85,7 +86,16 @@ function SelecedParkingInfo() {
 
                     btnRef.current.disabled = false;
 
-                    navigate('/');
+                    Swal.fire({
+                        title: 'Parking Ticket',
+                        text: `Your parking ticket no: ${ticketNum}`,
+                        icon: 'success',
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            navigate('/');
+                        }
+                    });
 
                 } catch (err) {
                     alert(err.message);

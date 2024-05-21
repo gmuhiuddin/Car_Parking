@@ -6,10 +6,10 @@
     background-color: #0e1930;
     padding: 9px;
     font-size: 100%;
-padding-top: 35px;
+    padding-top: 49px;
 }
 
-.select-park-info-container > span{
+.select-park-info-container>span {
     border-radius: 50%;
     height: 49px;
     width: 49px;
@@ -137,7 +137,7 @@ padding-top: 35px;
     border-color: #01d293;
 }
 
-.appointment-image{
+.appointment-image {
     text-align: center;
     color: #01d293;
     font-size: 1.2em;
@@ -151,15 +151,15 @@ padding-top: 35px;
 }
 
 @media screen and (max-width: 505px) {
-.mapboxgl-canvas{
-    width: 23em !important;
-    height: 25em !important;
-}
+    .mapboxgl-canvas {
+        width: 23em !important;
+        height: 25em !important;
+    }
 }
 
 @media screen and (max-width: 367px) {
-.mapboxgl-canvas{
-    width: 19em !important;
-    height: 21em !important;
-}
+    .mapboxgl-canvas {
+        width: 19em !important;
+        height: 21em !important;
+    }
 }
