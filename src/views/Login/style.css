@@ -79,7 +79,7 @@
   left: 0;
   z-index: 0;
   border-radius: 15px;
-  background: -webkit-linear-gradient(left, #003366, #004080, #0059b3, #0073e6);
+  background: -webkit-linear-gradient(left, #044d37, #06a877, #01d293, #02faaf);
   transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -191,7 +191,7 @@ form .btn .btn-layer {
   width: 300%;
   position: absolute;
   left: -100%;
-  background: -webkit-linear-gradient(right, #003366, #004080, #0059b3, #0073e6);
+  background: -webkit-linear-gradient(right, #0a5d44, #087b58, #00ffb3);
   border-radius: 15px;
   transition: all 0.4s ease;;
 }
@@ -213,6 +213,10 @@ form .btn input[type="submit"] {
   font-size: 1.5em;
   font-weight: 500;
   cursor: pointer;
+}
+
+form .btn input[type="submit"]:disabled {
+  cursor: not-allowed;
 }
 
 @media screen and (max-width: 535px) {

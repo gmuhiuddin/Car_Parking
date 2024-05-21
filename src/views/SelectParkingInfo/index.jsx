@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getBookedTime, makeAppointment, dateObjToDateInString } from '../../config/firebase.jsx';
+import { BsArrowLeft } from 'react-icons/bs';
+import { getBookedTime, makeAppointment, dateObjToDateInString, generateImageFromHtml } from '../../config/firebase.jsx';
 import Map from '../../components/Map/index.jsx';
 import './style.css';
 
@@ -11,6 +12,7 @@ function SelecedParkingInfo() {
     const [reservationLocation, setreservationLocation] = useState();
     const [reservationDate, setReservationDate] = useState();
     const [reservationTime, setReservationTime] = useState();
+
     const btnRef = useRef(null);
     const navigate = useNavigate();
 
@@ -23,7 +25,7 @@ function SelecedParkingInfo() {
     maxDateForReserveObj.setDate(maxDateForReserveObj.getDate() + 5);
 
     const maxDateForReserve = dateObjToDateInString(maxDateForReserveObj);
-    
+
     useEffect(() => {
         checkBookedTime();
     }, [reservationLocation, reservationDate]);
@@ -39,7 +41,7 @@ function SelecedParkingInfo() {
         const arr = [{ time: "00-00 01-00" }, { time: "01-00 02-00" }, { time: "02-00 03-00" }, { time: "03-00 04-00" }, { time: "04-00 05-00" }, { time: "05-00 06-00" }, { time: "06-00 07-00" }, { time: "07-00 08-00" }, { time: "08-00 09-00" }, { time: "9-00 10-00" }, { time: "10-00 11-00" }, { time: "11-00 12-00" }, { time: "12-00 13-00" }, { time: "13-00 14-00" }, { time: "14-00 15-00" }, { time: "15-00 16-00" }, { time: "16-00 17-00" }, { time: "17-00 18-00" }, { time: "18-00 19-00" }, { time: "19-00 20-00" }, { time: "20-00 21-00" }, { time: "21-00 22-00" }, { time: "22-00 23-00" }, { time: "23-00 24-00" }];
 
         const timeArr = arr.slice(dateObj.getHours());
-        
+
         const selectedTimeArr = await getBookedTime(date ? date : todayDate, reservationLocation);
 
         timeArr.forEach(element => {
@@ -75,15 +77,16 @@ function SelecedParkingInfo() {
         if (reservationDate && reservationLocation && reservationTime) {
 
             const timeObj = times.filter(element => element.time == reservationTime);
-
+            
             if (timeObj[0].booked < 5) {
 
                 try {
                     const ticketNum = await makeAppointment(res.uid, res.email, reservationDate, reservationTime, reservationLocation, timeObj[0].booked + 1);
 
                     btnRef.current.disabled = false;
-                    alert(`your ticket number was ${ticketNum}`);
-                    navigate("/");
+
+                    navigate('/');
+
                 } catch (err) {
                     alert(err.message);
                     document.location.reload();
@@ -93,7 +96,6 @@ function SelecedParkingInfo() {
             } else {
                 alert("Some thing went wrong");
                 btnRef.current.disabled = false;
-
                 document.location.reload();
             };
         } else {
@@ -105,6 +107,7 @@ function SelecedParkingInfo() {
 
     return (
         <div className='select-park-info-container'>
+            <span onClick={() => navigate('/')}><BsArrowLeft size={29} /></span>
             <div className="select-date-time-container">
                 <div className="select-data-container">
                     <input disabled={reservationLocation ? false : true} onChange={handleReservationDate} required type="date" min={todayDate} max={maxDateForReserve} />
@@ -141,10 +144,10 @@ function SelecedParkingInfo() {
                 <div>
                     <input onChange={handleReservationLocation} required type='radio' id='gurumandir' name='location' />
 
-                    <label htmlFor='gurumandir'><Map longitude={67.106765} latitude={24.9224938} /></label>
+                    <label htmlFor='gurumandir'><Map longitude={67.0373} latitude={24.8800} /></label>
                     <br />
                     <span>Gurumandir</span>
-                    <a target='_blank' href="https://www.google.com/maps/search/?api=1&query=24.9224938,67.106765 "><button>get direction</button></a>
+                    <a target='_blank' href="https://www.google.com/maps/search/?api=1&query=24.8800,67.0373 "><button>get direction</button></a>
                 </div>
             </div>
         </div >

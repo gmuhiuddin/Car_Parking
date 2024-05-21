@@ -1,10 +1,15 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './style.css';
 import { useNavigate } from 'react-router-dom';
 import { login, signup } from '../../config/firebase';
+import CustomAlert from '../../components/CutomAlert';
 
 function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
+  const loginBtnRef = useRef(null);
+  const signupBtnRef = useRef(null);
+  const [ errMessage, setErrMessage ] = useState('');
+  const [ successMessage, setSuccessMessage ] = useState('');
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -17,26 +22,40 @@ function LoginForm() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
+    setErrMessage("");
+
+    signupBtnRef.current.disabled = true;
+
     if (e.target[2].value === e.target[3].value) {
 
       try {
         await signup(e.target[0].value, e.target[1].value, e.target[2].value);
+        signupBtnRef.current.disabled = false;
+        setSuccessMessage("User signed up successfully");
       } catch (err) {
-        alert(err.message);
+        setErrMessage("User already exist");
+        signupBtnRef.current.disabled = false;
       };
 
     } else {
       e.target[3].value = "";
+      signupBtnRef.current.disabled = false;
     };
   };
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrMessage("");
+    loginBtnRef.current.disabled = true;
 
     try {
       await login(e.target[0].value, e.target[1].value);
+      loginBtnRef.current.disabled = false;
+      setSuccessMessage("User signed in successfully");
+
     } catch (err) {
-      alert(err.message);
+      setErrMessage("Email or password is incorrect");
+      loginBtnRef.current.disabled = false;
     };
 
   };
@@ -68,7 +87,7 @@ function LoginForm() {
                 {isLogin && <div className="pass-link"><a onClick={() => navigate('/forgotpasspage')}>Forgot password?</a></div>}
                 <div className="field btn">
                   <div className="btn-layer"></div>
-                  <input type="submit" value='Login' />
+                  <input ref={loginBtnRef} type="submit" value='Login' />
                 </div>
                 <div className="signup-link">Not a member? <a onClick={handleSignupClick}>Signup now</a></div>
               </form>
@@ -88,7 +107,7 @@ function LoginForm() {
                 </div>
                 <div className="field btn">
                   <div className="btn-layer"></div>
-                  <input type="submit" value="Signup" />
+                  <input ref={signupBtnRef} type="submit" value="Signup" />
                 </div>
                 {!isLogin && <div className="signup-link">Are you member? <a onClick={handleLoginClick}>login now</a></div>}
               </form>
@@ -96,6 +115,8 @@ function LoginForm() {
           </div>
         </div>
       </div>
+      {errMessage && <CustomAlert txt={errMessage} isErrMsg={true}/>}
+      {successMessage && <CustomAlert txt={successMessage} isErrMsg={false}/>}
     </div>
   );
 };

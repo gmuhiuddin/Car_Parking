@@ -6,7 +6,23 @@
     background-color: #0e1930;
     padding: 9px;
     font-size: 100%;
+padding-top: 35px;
 }
+
+.select-park-info-container > span{
+    border-radius: 50%;
+    height: 49px;
+    width: 49px;
+    position: fixed;
+    top: 1%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: #01d293;
+    cursor: pointer;
+}
+
 
 .select-park-info-container>div {
     width: 100%;
@@ -119,6 +135,13 @@
     padding: 17px;
     color: #01d293;
     border-color: #01d293;
+}
+
+.appointment-image{
+    text-align: center;
+    color: #01d293;
+    font-size: 1.2em;
+    width: 15em !important;
 }
 
 @media screen and (min-width: 505px) {

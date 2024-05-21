@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { toPng } from 'html-to-image';
 
 const firebaseConfig = {
     apiKey: "AIzaSyCYZ7jrySsTMZtSDI3cMNK1Vqk8kcvXswk",
@@ -72,6 +73,9 @@ const getBookedTime = async (reservationDate, reservationLocation) => {
 };
 
 const makeAppointment = async (uid, email, date, time, location, parkingSlotNum) => {
+
+    const appointmentDate = new Date(date);
+    
     const appointmentIdCollection = doc(db, "appointmentId", "7STXCXe6yHLvM5zR73Ld");
 
     const appointmentIdData = await getDoc(appointmentIdCollection);
@@ -82,14 +86,14 @@ const makeAppointment = async (uid, email, date, time, location, parkingSlotNum)
     await setDoc(appointmentDoc, {
         time, uid, date: appointmentDate.getTime(), location
     });
-
+    
     await fetch("https://carparkingnode-production.up.railway.app/sendmail/confirmemail", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
         body: JSON.stringify({
-            email, ticketNum, location, parkingSlotNum, date, time
+            email, ticketNum: "89", location, parkingSlotNum, date, time
         })
     });
 
@@ -134,4 +138,16 @@ const getUserAppointmentFromDb = async (uid, date) => {
     return appointments;
 };
 
-export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString };
+const generateImageFromHtml = async (element) => {
+  if (!element) throw new Error("Element is required to generate image");
+  
+  try {
+    const dataUrl = await toPng(element);
+    return dataUrl;
+  } catch (error) {
+    console.error("Error generating image from HTML:", error);
+    throw error;
+  }
+};
+
+export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString, generateImageFromHtml };
