@@ -16,9 +16,8 @@ function Home() {
     const getUserAppointment = async () => {
 
         const date = new Date();
-        const todayDate = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" + String(date.getMonth() + 1) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + String(date.getDate()) : date.getDate()}`;
 
-        const userApointment = await getUserAppointmentFromDb(res.uid, todayDate);
+        const userApointment = await getUserAppointmentFromDb(res.uid, date);
 
         const appointmentArr = [];
 
@@ -48,8 +47,8 @@ function Home() {
         <div className='home-main-contianer'>
             <div className='appointment-container'>
 
-                <div>
                     <h2>Your Appointment</h2>
+                <div>
 
                     {userAppointments.length ?
                         <table>

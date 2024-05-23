@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { BsArrowLeft } from 'react-icons/bs';
 import Swal from 'sweetalert2';
-import { getBookedTime, makeAppointment, dateObjToDateInString, generateImageFromHtml } from '../../config/firebase.jsx';
+import { getBookedTime, makeAppointment, dateObjToDateInString, getRealTimeBookedTime } from '../../config/firebase.jsx';
 import Map from '../../components/Map/index.jsx';
 import './style.css';
 
@@ -13,7 +13,7 @@ function SelecedParkingInfo() {
     const [reservationLocation, setreservationLocation] = useState();
     const [reservationDate, setReservationDate] = useState();
     const [reservationTime, setReservationTime] = useState();
-
+    
     const btnRef = useRef(null);
     const navigate = useNavigate();
 
@@ -44,6 +44,7 @@ function SelecedParkingInfo() {
         const timeArr = arr.slice(dateObj.getHours());
 
         const selectedTimeArr = await getBookedTime(date ? date : todayDate, reservationLocation);
+        getRealTimeBookedTime(date ? date : todayDate, reservationLocation, dateObj, setTimes)
 
         timeArr.forEach(element => {
             element.booked = 0;
@@ -75,6 +76,12 @@ function SelecedParkingInfo() {
     const handleBookReservation = async () => {
         btnRef.current.disabled = true;
 
+        const dateObj = new Date(reservationDate);
+
+        const date = dateObj.getTime() ? dateObjToDateInString(dateObj) : null;
+
+        date != todayDate ? dateObj.setHours(0) : dateObj.setHours(todayDateObj.getHours());
+
         if (reservationDate && reservationLocation && reservationTime) {
 
             const timeObj = times.filter(element => element.time == reservationTime);
@@ -82,7 +89,7 @@ function SelecedParkingInfo() {
             if (timeObj[0].booked < 5) {
 
                 try {
-                    const ticketNum = await makeAppointment(res.uid, res.email, reservationDate, reservationTime, reservationLocation, timeObj[0].booked + 1);
+                    const ticketNum = await makeAppointment(res.uid, res.email, dateObj, reservationTime, reservationLocation, timeObj[0].booked + 1);
 
                     btnRef.current.disabled = false;
 

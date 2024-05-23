@@ -3,6 +3,7 @@
     height: 100vh;
     width: 100%;
     background-color: #0e1930;
+    align-items: center;
 }
 
 .home-main-contianer>div {
@@ -30,7 +31,7 @@ h1 {
     text-align: center;
 }
 
-.home-main-contianer>div>div>h2 {
+.home-main-contianer>div>h2 {
     font-size: 1.7em;
     font-weight: 600;
     color: #808dad;
@@ -100,6 +101,7 @@ h1 {
 
     .home-main-contianer>div {
         width: 100%;
+        height: 50%;
     }
 
     .home-main-contianer>div>div {

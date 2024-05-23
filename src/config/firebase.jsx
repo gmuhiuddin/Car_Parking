@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from "firebase/auth";
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, onSnapshot, orderBy, query, setDoc, updateDoc, where } from "firebase/firestore";
 import { toPng } from 'html-to-image';
 
 const firebaseConfig = {
@@ -46,36 +46,29 @@ const getUserData = async (uid) => {
 };
 
 const getBookedTime = async (reservationDate, reservationLocation) => {
+
+    const date = new Date(reservationDate);
+
     const appointmentCollection = collection(db, "appointment");
 
     const q = reservationLocation ? query(
         appointmentCollection,
         where("location", "==", reservationLocation),
-        where("date", ">=", reservationDate),
+        where("date", ">=", date.getTime()),
     ) : appointmentCollection;
 
-    let appointments = await getDocs(q);
+    const appointments = await getDocs(q);
 
-    appointments = appointments.docs.filter(element => {
-        const dateObj = new Date(element.data().date);
-
-        const date = dateObjToDateInString(dateObj);
-        
-        return date == reservationDate;
-    });
-    
     const selectedTimes = [];
-    
+
     appointments.forEach(element => {
         selectedTimes.push(element.data().time);
     });
-    
+
     return selectedTimes;
 };
 
 const makeAppointment = async (uid, email, date, time, location, parkingSlotNum) => {
-
-    const appointmentDate = new Date(date);
 
     const appointmentIdCollection = doc(db, "appointmentId", "7STXCXe6yHLvM5zR73Ld");
 
@@ -85,7 +78,7 @@ const makeAppointment = async (uid, email, date, time, location, parkingSlotNum)
     const appointmentDoc = doc(db, "appointment", String(ticketNum));
 
     await setDoc(appointmentDoc, {
-        time, uid, date: appointmentDate.getTime(), location
+        time, uid, date: date.getTime(), location
     });
 
     await fetch("https://carparkingnode-production.up.railway.app/sendmail/confirmemail", {
@@ -123,14 +116,12 @@ const cancelAppointment = async (email, ticketNum) => {
 
 const getUserAppointmentFromDb = async (uid, date) => {
 
-    const appointmentDate = new Date(date);
-
     const appointmentCollection = collection(db, "appointment");
 
     const q = query(
         appointmentCollection,
         orderBy("date", "asc"),
-        where("date", ">=", appointmentDate.getTime()),
+        where("date", ">=", date.getTime()),
         where("uid", "==", uid),
     );
 
@@ -139,20 +130,44 @@ const getUserAppointmentFromDb = async (uid, date) => {
     return appointments;
 };
 
-const generateImageFromHtml = async (element) => {
-    if (!element) throw new Error("Element is required to generate image");
-
-    try {
-        const dataUrl = await toPng(element);
-        return dataUrl;
-    } catch (error) {
-        console.error("Error generating image from HTML:", error);
-        throw error;
-    }
-};
-
 const sendResetEmail = async (email) => {
     await sendPasswordResetEmail(auth, email);
 };
 
-export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString, generateImageFromHtml, sendResetEmail };
+const getRealTimeBookedTime = async (reservationDate, reservationLocation, dateObj, setTimes) => {
+
+    const date = new Date(reservationDate);
+
+    const arr = [{ time: "00-00 01-00" }, { time: "01-00 02-00" }, { time: "02-00 03-00" }, { time: "03-00 04-00" }, { time: "04-00 05-00" }, { time: "05-00 06-00" }, { time: "06-00 07-00" }, { time: "07-00 08-00" }, { time: "08-00 09-00" }, { time: "9-00 10-00" }, { time: "10-00 11-00" }, { time: "11-00 12-00" }, { time: "12-00 13-00" }, { time: "13-00 14-00" }, { time: "14-00 15-00" }, { time: "15-00 16-00" }, { time: "16-00 17-00" }, { time: "17-00 18-00" }, { time: "18-00 19-00" }, { time: "19-00 20-00" }, { time: "20-00 21-00" }, { time: "21-00 22-00" }, { time: "22-00 23-00" }, { time: "23-00 24-00" }];
+
+    const timeArr = arr.slice(dateObj.getHours());
+
+    const appointmentCollection = collection(db, "appointment");
+
+    const q = reservationLocation ? query(
+        appointmentCollection,
+        where("location", "==", reservationLocation),
+        where("date", ">=", date.getTime()),
+    ) : appointmentCollection;
+
+    onSnapshot(q, res => {
+
+        timeArr.forEach(timeElement => {
+                timeElement.booked = 0 ;
+        });
+
+        res.docs.forEach(element => {
+                timeArr.forEach(timeElement => {
+                if (element.data().time == timeElement.time) {
+                    timeElement.booked = timeElement.booked + 1;
+                };
+            });
+        });
+        if (res.docs.length) {
+            setTimes(timeArr);
+        };
+    });
+
+};
+
+export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString, getRealTimeBookedTime, sendResetEmail };

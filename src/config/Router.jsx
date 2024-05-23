@@ -59,7 +59,7 @@ function Layout() {
 
     const res = useSelector(res => res.userInfo.user);
 
-    const [ loader, setLoader ] = useState(true);
+    const [ loader, setLoader ] = useState(false);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -80,17 +80,14 @@ function Layout() {
     useEffect(() => {
         if (res.uid) {
 
-
             if (pathname == "/login" || pathname == "/forgotpasspage") {
                 navigate("/");
-                setLoader(false);
             }else{
                 setLoader(false);
             };
         } else {
             if (pathname == "/selectparkinfo" || pathname == "/") {
                 navigate("/login");
-                setLoader(false);
             }else{
                 setLoader(false);
             };
