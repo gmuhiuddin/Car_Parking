@@ -18,7 +18,7 @@ const auth = getAuth(app);
 const db = getFirestore(app);
 
 const dateObjToDateInString = (dateObj) => {
-return `${dateObj.getFullYear()}-${dateObj.getMonth() + 1 < 10 ? 0 + String(dateObj.getMonth() + 1) : dateObj.getMonth() + 1}-${dateObj.getDate() < 10 ? 0 + String(dateObj.getDate()) : dateObj.getDate()}`;
+    return `${dateObj.getFullYear()}-${dateObj.getMonth() + 1 < 10 ? 0 + String(dateObj.getMonth() + 1) : dateObj.getMonth() + 1}-${dateObj.getDate() < 10 ? 0 + String(dateObj.getDate()) : dateObj.getDate()}`;
 };
 
 const signup = async (username, email, password) => {
@@ -50,7 +50,8 @@ const getBookedTime = async (reservationDate, reservationLocation) => {
 
     const q = reservationLocation ? query(
         appointmentCollection,
-        where("location", "==", reservationLocation)
+        where("location", "==", reservationLocation),
+        where("date", ">=", reservationDate),
     ) : appointmentCollection;
 
     let appointments = await getDocs(q);
@@ -75,7 +76,7 @@ const getBookedTime = async (reservationDate, reservationLocation) => {
 const makeAppointment = async (uid, email, date, time, location, parkingSlotNum) => {
 
     const appointmentDate = new Date(date);
-    
+
     const appointmentIdCollection = doc(db, "appointmentId", "7STXCXe6yHLvM5zR73Ld");
 
     const appointmentIdData = await getDoc(appointmentIdCollection);
@@ -86,7 +87,7 @@ const makeAppointment = async (uid, email, date, time, location, parkingSlotNum)
     await setDoc(appointmentDoc, {
         time, uid, date: appointmentDate.getTime(), location
     });
-    
+
     await fetch("https://carparkingnode-production.up.railway.app/sendmail/confirmemail", {
         method: "POST",
         headers: {
@@ -139,19 +140,19 @@ const getUserAppointmentFromDb = async (uid, date) => {
 };
 
 const generateImageFromHtml = async (element) => {
-  if (!element) throw new Error("Element is required to generate image");
-  
-  try {
-    const dataUrl = await toPng(element);
-    return dataUrl;
-  } catch (error) {
-    console.error("Error generating image from HTML:", error);
-    throw error;
-  }
+    if (!element) throw new Error("Element is required to generate image");
+
+    try {
+        const dataUrl = await toPng(element);
+        return dataUrl;
+    } catch (error) {
+        console.error("Error generating image from HTML:", error);
+        throw error;
+    }
 };
 
 const sendResetEmail = async (email) => {
-await sendPasswordResetEmail(auth, email);
+    await sendPasswordResetEmail(auth, email);
 };
 
 export { getBookedTime, auth, login, signup, getUserData, logout, makeAppointment, cancelAppointment, getUserAppointmentFromDb, dateObjToDateInString, generateImageFromHtml, sendResetEmail };

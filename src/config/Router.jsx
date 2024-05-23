@@ -5,10 +5,11 @@ import Home from "../views/Home";
 import Login from "../views/Login";
 import SelecedParkingInfo from "../views/SelectParkingInfo";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { removeUser, setUser } from "../store/userSlice";
 import Navbar from "../components/Navbar";
 import PassResetPage from "../views/PassResetPage";
+import Loader from "../views/Loader";
 
 const router = createBrowserRouter([
     {
@@ -58,6 +59,7 @@ function Layout() {
 
     const res = useSelector(res => res.userInfo.user);
 
+    const [ loader, setLoader ] = useState(true);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -81,13 +83,22 @@ function Layout() {
 
             if (pathname == "/login" || pathname == "/forgotpasspage") {
                 navigate("/");
+                setLoader(false);
+            }else{
+                setLoader(false);
             };
         } else {
             if (pathname == "/selectparkinfo" || pathname == "/") {
                 navigate("/login");
+                setLoader(false);
+            }else{
+                setLoader(false);
             };
         };
     }, [res, pathname]);
+
+
+    if(loader) return <Loader />
 
     return (
         <Outlet />
