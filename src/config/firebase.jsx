@@ -116,12 +116,15 @@ const cancelAppointment = async (email, ticketNum) => {
 
 const getUserAppointmentFromDb = async (uid, date) => {
 
+    const dateObj = new Date(date);
+    dateObj.setHours(date.getHours()-1);
+    
     const appointmentCollection = collection(db, "appointment");
-
+    
     const q = query(
         appointmentCollection,
         orderBy("date", "asc"),
-        where("date", ">=", date.getTime()),
+        where("date", ">=", dateObj.getTime()),
         where("uid", "==", uid),
     );
 
