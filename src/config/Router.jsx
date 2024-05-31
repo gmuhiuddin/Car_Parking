@@ -59,43 +59,43 @@ function Layout() {
 
     const res = useSelector(res => res.userInfo.user);
 
-    const [ loader, setLoader ] = useState(false);
+    const [ loader, setLoader ] = useState(true);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    onAuthStateChanged(auth, async user => {
-        if (user) {
-            if (!res.uid) {
-
-                const userInfo = await getUserData(user.uid);
-
-                dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
+    useEffect(() => {
+        onAuthStateChanged(auth, async user => {
+            if (user) {
+                if (!res.uid) {
+    
+                    const userInfo = await getUserData(user.uid);
+    
+                    dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
+                };
+                setLoader(false);
+            } else {
+                res.uid && dispatch(removeUser());
+                setLoader(false);
             };
-        } else {
-            res.uid && dispatch(removeUser());
-        };
-    });
+        });
+    }, [])
 
     useEffect(() => {
         if (res.uid) {
 
             if (pathname == "/login" || pathname == "/forgotpasspage") {
                 navigate("/");
-            }else{
-                setLoader(false);
             };
         } else {
             if (pathname == "/selectparkinfo" || pathname == "/") {
                 navigate("/login");
-            }else{
-                setLoader(false);
             };
         };
     }, [res, pathname]);
 
 
-    if(loader) return <Loader />
+    if(loader) return <Loader />;
 
     return (
         <Outlet />
