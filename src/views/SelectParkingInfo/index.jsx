@@ -9,10 +9,10 @@ import './style.css';
 
 function SelecedParkingInfo() {
     const [times, setTimes] = useState([]);
-    const res = useSelector(res => res.userInfo.user);
     const [reservationLocation, setreservationLocation] = useState();
     const [reservationDate, setReservationDate] = useState();
     const [reservationTime, setReservationTime] = useState();
+    const res = useSelector(res => res.userInfo.user);
     
     const btnRef = useRef(null);
     const navigate = useNavigate();
@@ -30,35 +30,34 @@ function SelecedParkingInfo() {
     useEffect(() => {
         checkBookedTime();
     }, [reservationLocation, reservationDate]);
-
+    
     async function checkBookedTime() {
+        const dateObj = new Date(reservationDate || Date.now());
 
-        const dateObj = new Date(reservationDate);
+        if (reservationDate) {
+            reservationDate == todayDate ? dateObj.setHours(todayDateObj.getHours()) : dateObj.setHours(0);
+        };
 
-        const date = dateObj.getTime() ? dateObjToDateInString(dateObj) : null;
+        const date = dateObjToDateInString(dateObj);
 
-        date != todayDate ? dateObj.setHours(0) : dateObj.setHours(todayDateObj.getHours());
+        // const timeArr = arr.slice(dateObj.getHours());
 
-        const arr = [{ time: "00-00 01-00" }, { time: "01-00 02-00" }, { time: "02-00 03-00" }, { time: "03-00 04-00" }, { time: "04-00 05-00" }, { time: "05-00 06-00" }, { time: "06-00 07-00" }, { time: "07-00 08-00" }, { time: "08-00 09-00" }, { time: "9-00 10-00" }, { time: "10-00 11-00" }, { time: "11-00 12-00" }, { time: "12-00 13-00" }, { time: "13-00 14-00" }, { time: "14-00 15-00" }, { time: "15-00 16-00" }, { time: "16-00 17-00" }, { time: "17-00 18-00" }, { time: "18-00 19-00" }, { time: "19-00 20-00" }, { time: "20-00 21-00" }, { time: "21-00 22-00" }, { time: "22-00 23-00" }, { time: "23-00 24-00" }];
+        // const selectedTimeArr = await getBookedTime(date ? date : todayDate, reservationLocation);
+        getRealTimeBookedTime(date , reservationLocation, dateObj, setTimes);
 
-        const timeArr = arr.slice(dateObj.getHours());
+        // timeArr.forEach(element => {
+        //     element.booked = 0;
+        // });
 
-        const selectedTimeArr = await getBookedTime(date ? date : todayDate, reservationLocation);
-        getRealTimeBookedTime(date ? date : todayDate, reservationLocation, dateObj, setTimes)
+        // selectedTimeArr.forEach(SelecedTimeElement => {
+        //     timeArr.forEach(timeElement => {
+        //         if (timeElement.time == SelecedTimeElement) {
+        //             timeElement.booked = timeElement.booked + 1;
+        //         }
+        //     })
+        // });
 
-        timeArr.forEach(element => {
-            element.booked = 0;
-        });
-
-        selectedTimeArr.forEach(SelecedTimeElement => {
-            timeArr.forEach(timeElement => {
-                if (timeElement.time == SelecedTimeElement) {
-                    timeElement.booked = timeElement.booked + 1;
-                }
-            })
-        });
-
-        setTimes(timeArr);
+        // setTimes(timeArr);
     };
 
     const handleReservationLocation = (e) => {
@@ -75,14 +74,14 @@ function SelecedParkingInfo() {
 
     const handleBookReservation = async () => {
         btnRef.current.disabled = true;
-
-        const dateObj = new Date(reservationDate);
-
-        const date = dateObj.getTime() ? dateObjToDateInString(dateObj) : null;
-
-        date != todayDate ? dateObj.setHours(0) : dateObj.setHours(todayDateObj.getHours());
+       
+        const timeArr = [{ time: "00-00 01-00" }, { time: "01-00 02-00" }, { time: "02-00 03-00" }, { time: "03-00 04-00" }, { time: "04-00 05-00" }, { time: "05-00 06-00" }, { time: "06-00 07-00" }, { time: "07-00 08-00" }, { time: "08-00 09-00" }, { time: "09-00 10-00" }, { time: "10-00 11-00" }, { time: "11-00 12-00" }, { time: "12-00 13-00" }, { time: "13-00 14-00" }, { time: "14-00 15-00" }, { time: "15-00 16-00" }, { time: "16-00 17-00" }, { time: "17-00 18-00" }, { time: "18-00 19-00" }, { time: "19-00 20-00" }, { time: "20-00 21-00" }, { time: "21-00 22-00" }, { time: "22-00 23-00" }, { time: "23-00 24-00" }];
 
         if (reservationDate && reservationLocation && reservationTime) {
+
+            const dateObj = new Date(reservationDate);
+    
+            dateObj.setHours(timeArr.indexOf(reservationTime));
 
             const timeObj = times.filter(element => element.time == reservationTime);
 

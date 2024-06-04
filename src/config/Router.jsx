@@ -59,7 +59,7 @@ function Layout() {
 
     const res = useSelector(res => res.userInfo.user);
 
-    const [ loader, setLoader ] = useState(true);
+    const [loader, setLoader] = useState(true);
     const { pathname } = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -67,15 +67,15 @@ function Layout() {
     useEffect(() => {
         onAuthStateChanged(auth, async user => {
             if (user) {
-                if (!res.uid) {
-    
-                    const userInfo = await getUserData(user.uid);
-    
-                    dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
-                };
+
+
+                const userInfo = await getUserData(user.uid);
+
+                dispatch(setUser({ ...userInfo.data(), uid: userInfo.id }));
+
                 setLoader(false);
             } else {
-                res.uid && dispatch(removeUser());
+                dispatch(removeUser());
                 setLoader(false);
             };
         });
@@ -95,7 +95,7 @@ function Layout() {
     }, [res, pathname]);
 
 
-    if(loader) return <Loader />;
+    if (loader) return <Loader />;
 
     return (
         <Outlet />
