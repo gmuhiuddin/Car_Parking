@@ -69,16 +69,16 @@ const getBookedTime = async (reservationDate, reservationLocation) => {
 };
 
 const makeAppointment = async (uid, email, date, time, location, parkingSlotNum) => {
-
+    
     const appointmentIdCollection = doc(db, "appointmentId", "7STXCXe6yHLvM5zR73Ld");
 
     const appointmentIdData = await getDoc(appointmentIdCollection);
     const ticketNum = appointmentIdData.data().id + 1;
 
     const appointmentDoc = doc(db, "appointment", String(ticketNum));
-
+    
     await setDoc(appointmentDoc, {
-        time, uid, location, date: dateObjToDateInString(date)
+        time, uid, dateTime: date.getTime(), location, date: dateObjToDateInString(date)
     });
 
     await fetch("https://carparkingnode-production.up.railway.app/sendmail/confirmemail", {
@@ -115,21 +115,18 @@ const cancelAppointment = async (email, ticketNum) => {
 };
 
 const getUserAppointmentFromDb = async (uid, date) => {
-
-    const dateObj = new Date(date);
-    dateObj.setHours(date.getHours() - 1);
-
+    
     const appointmentCollection = collection(db, "appointment");
-
+    
     const q = query(
         appointmentCollection,
-        orderBy("date", "asc"),
-        where("date", ">=", dateObj.getTime()),
+        orderBy("dateTime", "asc"),
+        where("dateTime", ">=", date.getTime()),
         where("uid", "==", uid),
     );
 
     const appointments = await getDocs(q);
-
+    
     return appointments;
 };
 

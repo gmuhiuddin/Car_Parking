@@ -13,7 +13,7 @@ function SelecedParkingInfo() {
     const [reservationDate, setReservationDate] = useState();
     const [reservationTime, setReservationTime] = useState();
     const res = useSelector(res => res.userInfo.user);
-    
+
     const btnRef = useRef(null);
     const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ function SelecedParkingInfo() {
     useEffect(() => {
         checkBookedTime();
     }, [reservationLocation, reservationDate]);
-    
+
     async function checkBookedTime() {
         const dateObj = new Date(reservationDate || Date.now());
 
@@ -43,7 +43,7 @@ function SelecedParkingInfo() {
         // const timeArr = arr.slice(dateObj.getHours());
 
         // const selectedTimeArr = await getBookedTime(date ? date : todayDate, reservationLocation);
-        getRealTimeBookedTime(date , reservationLocation, dateObj, setTimes);
+        getRealTimeBookedTime(date, reservationLocation, dateObj, setTimes);
 
         // timeArr.forEach(element => {
         //     element.booked = 0;
@@ -74,14 +74,14 @@ function SelecedParkingInfo() {
 
     const handleBookReservation = async () => {
         btnRef.current.disabled = true;
-       
+
         const timeArr = [{ time: "00-00 01-00" }, { time: "01-00 02-00" }, { time: "02-00 03-00" }, { time: "03-00 04-00" }, { time: "04-00 05-00" }, { time: "05-00 06-00" }, { time: "06-00 07-00" }, { time: "07-00 08-00" }, { time: "08-00 09-00" }, { time: "09-00 10-00" }, { time: "10-00 11-00" }, { time: "11-00 12-00" }, { time: "12-00 13-00" }, { time: "13-00 14-00" }, { time: "14-00 15-00" }, { time: "15-00 16-00" }, { time: "16-00 17-00" }, { time: "17-00 18-00" }, { time: "18-00 19-00" }, { time: "19-00 20-00" }, { time: "20-00 21-00" }, { time: "21-00 22-00" }, { time: "22-00 23-00" }, { time: "23-00 24-00" }];
 
         if (reservationDate && reservationLocation && reservationTime) {
 
             const dateObj = new Date(reservationDate);
-    
-            dateObj.setHours(timeArr.indexOf(reservationTime));
+            const timeIndex = timeArr.findIndex(obj => obj.time == reservationTime);
+            dateObj.setHours(timeIndex);
 
             const timeObj = times.filter(element => element.time == reservationTime);
 
@@ -105,19 +105,19 @@ function SelecedParkingInfo() {
 
                 } catch (err) {
                     alert(err.message);
-                    document.location.reload();
+                    navigate('/selectparkinfo');
                     btnRef.current.disabled = false;
                 }
 
             } else {
-                alert("Some thing went wrong");
+                alert("Parking was full");
                 btnRef.current.disabled = false;
-                document.location.reload();
+                navigate('/selectparkinfo');
             };
         } else {
             btnRef.current.disabled = false;
-            alert("Some thing went wrong");
-            document.location.reload();
+            alert("Please fill al the fields");
+            navigate('/selectparkinfo');
         };
     };
 
