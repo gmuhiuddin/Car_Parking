@@ -81,7 +81,7 @@ function SelecedParkingInfo() {
 
             const dateObj = new Date(reservationDate);
             const timeIndex = timeArr.findIndex(obj => obj.time == reservationTime);
-            dateObj.setHours(timeIndex);
+            dateObj.setHours(timeIndex+1);
 
             const timeObj = times.filter(element => element.time == reservationTime);
 
@@ -98,9 +98,7 @@ function SelecedParkingInfo() {
                         icon: 'success',
                         confirmButtonText: 'Ok',
                     }).then((result) => {
-                        if (result.isConfirmed) {
-                            navigate('/');
-                        }
+                        navigate('/');
                     });
 
                 } catch (err) {
