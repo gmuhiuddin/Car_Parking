@@ -82,6 +82,7 @@ function SelecedParkingInfo() {
             const dateObj = new Date(reservationDate);
             const timeIndex = timeArr.findIndex(obj => obj.time == reservationTime);
             dateObj.setHours(timeIndex+1);
+dateObj.setMinutes(0);
 
             const timeObj = times.filter(element => element.time == reservationTime);
 
