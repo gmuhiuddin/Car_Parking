@@ -8,8 +8,8 @@ function LoginForm() {
   const [isLogin, setIsLogin] = useState(true);
   const loginBtnRef = useRef(null);
   const signupBtnRef = useRef(null);
-  const [ errMessage, setErrMessage ] = useState('');
-  const [ successMessage, setSuccessMessage ] = useState('');
+  const [errMessage, setErrMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -23,14 +23,12 @@ function LoginForm() {
   const handleSignup = async (e) => {
     e.preventDefault();
     setErrMessage("");
-
     signupBtnRef.current.disabled = true;
 
     if (e.target[2].value === e.target[3].value) {
 
       try {
         await signup(e.target[0].value, e.target[1].value, e.target[2].value);
-        signupBtnRef.current.disabled = false;
         setSuccessMessage("User signed up successfully");
       } catch (err) {
         setErrMessage("User already exist");
@@ -115,8 +113,8 @@ function LoginForm() {
           </div>
         </div>
       </div>
-      {errMessage && <CustomAlert txt={errMessage} isErrMsg={true}/>}
-      {successMessage && <CustomAlert txt={successMessage} isErrMsg={false}/>}
+      {errMessage && <CustomAlert txt={errMessage} isErrMsg={true} />}
+      {successMessage && <CustomAlert txt={successMessage} isErrMsg={false} />}
     </div>
   );
 };
